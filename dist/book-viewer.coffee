@@ -110,7 +110,7 @@ $ () ->
     $bookSummary.append($summary)
 
     currentPagePath = URI(window.location.href).pathname()
-    $bookSummary.find(".summary li:has(> a[href='#{currentPagePath}'])")[0]?.scrollIntoView()
+    $bookSummary.find(".summary li:has(> a[href='#{currentPagePath}'])").parent().parent()[0]?.scrollIntoView()
     renderNextPrev()
 
   renderNextPrev = ->
@@ -169,7 +169,7 @@ $ () ->
     visited[currentPagePath] = new Date()
     window.localStorage.visited = JSON.stringify(visited)
 
-    $bookSummary.find(".summary li:has(> a[href='#{currentPagePath}'])").addClass('visited')[0]?.scrollIntoView()
+    $bookSummary.find(".summary li:has(> a[href='#{currentPagePath}'])").addClass('visited').parent().parent()[0]?.scrollIntoView()
 
 
   tocHelper = new class TocHelper
@@ -281,4 +281,3 @@ $ () ->
       renderNextPrev()
 
     evt.preventDefault()
-

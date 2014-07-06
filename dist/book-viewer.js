@@ -93,7 +93,7 @@
       $bookSummary.children('.summary').remove();
       $bookSummary.append($summary);
       currentPagePath = URI(window.location.href).pathname();
-      if ((_ref = $bookSummary.find(".summary li:has(> a[href='" + currentPagePath + "'])")[0]) != null) {
+      if ((_ref = $bookSummary.find(".summary li:has(> a[href='" + currentPagePath + "'])").parent().parent()[0]) != null) {
         _ref.scrollIntoView();
       }
       return renderNextPrev();
@@ -160,7 +160,7 @@
       visited = window.localStorage.visited && JSON.parse(window.localStorage.visited) || {};
       visited[currentPagePath] = new Date();
       window.localStorage.visited = JSON.stringify(visited);
-      return (_ref2 = $bookSummary.find(".summary li:has(> a[href='" + currentPagePath + "'])").addClass('visited')[0]) != null ? _ref2.scrollIntoView() : void 0;
+      return (_ref2 = $bookSummary.find(".summary li:has(> a[href='" + currentPagePath + "'])").addClass('visited').parent().parent()[0]) != null ? _ref2.scrollIntoView() : void 0;
     };
     tocHelper = new (TocHelper = (function() {
       function TocHelper() {}
