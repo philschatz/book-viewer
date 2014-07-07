@@ -140,7 +140,7 @@
       }
     };
     pageBeforeRender = function($els, href) {
-      var $figure, $img, currentPagePath, el, img, visited, _i, _j, _len, _len1, _ref, _ref1, _ref2;
+      var $all, $figure, $img, currentPagePath, el, img, selector, visited, _i, _j, _len, _len1, _ref, _ref1, _ref2;
       _ref = $els.find('a[href]');
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         el = _ref[_i];
@@ -160,7 +160,21 @@
       visited = window.localStorage.visited && JSON.parse(window.localStorage.visited) || {};
       visited[currentPagePath] = new Date();
       window.localStorage.visited = JSON.stringify(visited);
-      return (_ref2 = $bookSummary.find(".summary li:has(> a[href='" + currentPagePath + "'])").addClass('visited').parent().parent()[0]) != null ? _ref2.scrollIntoView() : void 0;
+      if ((_ref2 = $bookSummary.find(".summary li:has(> a[href='" + currentPagePath + "'])").addClass('visited').parent().parent()[0]) != null) {
+        _ref2.scrollIntoView();
+      }
+      selector = 'h1, h2, h3, h4, h5, h6';
+      $all = $els.filter(selector).add($els.find(selector));
+      return $all.each(function(i, el) {
+        var $a, $el, icon, id;
+        $el = $(el);
+        id = $el.attr('id');
+        if (id) {
+          icon = '<i class="fa fa-link"></i>';
+          $a = $('<a />').addClass('header-link').attr('href', '#' + id).html(icon);
+          return $el.prepend($a);
+        }
+      });
     };
     tocHelper = new (TocHelper = (function() {
       function TocHelper() {}

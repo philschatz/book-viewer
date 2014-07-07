@@ -172,6 +172,22 @@ $ () ->
     $bookSummary.find(".summary li:has(> a[href='#{currentPagePath}'])").addClass('visited').parent().parent()[0]?.scrollIntoView()
 
 
+    selector = 'h1, h2, h3, h4, h5, h6'
+    $all = $els.filter(selector).add($els.find(selector))
+    $all.each (i, el) ->
+      $el = $(el)
+      id = $el.attr('id')
+      if id
+        icon = '<i class="fa fa-link"></i>'
+        $a = $('<a />')
+        .addClass('header-link')
+        .attr('href', '#' + id)
+        .html(icon)
+
+        $el.prepend($a)
+
+
+
   tocHelper = new class TocHelper
     _tocHref: null
     _tocList: []
