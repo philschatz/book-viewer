@@ -140,7 +140,7 @@
       }
     };
     pageBeforeRender = function($els, href) {
-      var $all, $figure, $img, currentPagePath, el, img, selector, visited, _i, _j, _len, _len1, _ref, _ref1, _ref2;
+      var $all, $figure, $img, currentPagePath, el, id, img, selector, visited, _i, _j, _len, _len1, _ref, _ref1, _ref2;
       _ref = $els.find('a[href]');
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         el = _ref[_i];
@@ -150,11 +150,14 @@
       for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
         img = _ref1[_j];
         $img = $(img);
+        id = $img.attr('id');
+        $img.removeAttr('id');
         $figure = $img.wrap('<figure>').parent();
         $figure.append("<figcaption>" + ($img.attr('title')) + "</figcaption>");
         if ($img.attr('data-title')) {
           $figure.prepend("<div data-type='title'>" + ($img.attr('data-title')) + "</div>");
         }
+        $figure.attr('id', id);
       }
       currentPagePath = URI(href).pathname();
       visited = window.localStorage.visited && JSON.parse(window.localStorage.visited) || {};
@@ -166,7 +169,7 @@
       selector = 'h1, h2, h3, h4, h5, h6';
       $all = $els.filter(selector).add($els.find(selector));
       return $all.each(function(i, el) {
-        var $a, $el, icon, id;
+        var $a, $el, icon;
         $el = $(el);
         id = $el.attr('id');
         if (id) {

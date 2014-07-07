@@ -159,9 +159,12 @@ $ () ->
     # Convert `img[title]` tags into figures so they get numbered and titles are visible
     for img in $els.find('img[title]')
       $img = $(img)
+      id = $img.attr('id')
+      $img.removeAttr('id')
       $figure = $img.wrap('<figure>').parent()
       $figure.append("<figcaption>#{$img.attr('title')}</figcaption>")
       $figure.prepend("<div data-type='title'>#{$img.attr('data-title')}</div>") if $img.attr('data-title')
+      $figure.attr('id', id)
 
     # Remember that this page has been visited
     currentPagePath = URI(href).pathname()
