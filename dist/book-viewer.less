@@ -83,7 +83,7 @@ h6:hover .header-link {
   .book-summary {
     background-color: #fafafa;
 
-    .summary {
+    ul.summary {
       counter-reset: chapter;
 
       li.part { font-size: 130%; font-weight: bold; color: black; padding-left: 15px; }
@@ -91,43 +91,44 @@ h6:hover .header-link {
 
       ol {
         padding: 0;
+      }
+
+
+      li {
+        padding: 10px 0px;
+        list-style-type: none;
+        /* Add ellipses if the title is long */
+        white-space: nowrap;
+        overflow-x: hidden;
+        text-overflow: ellipsis;
 
         // This is because of Gitbook CSS
-        a { display: inline !important; padding: 0; }
+        > a { display: inline !important; }
 
-        li {
-          padding: 10px 0px;
-          list-style-type: none;
-          /* Add ellipses if the title is long */
-          white-space: nowrap;
-          overflow-x: hidden;
-          text-overflow: ellipsis;
+        &::before {
+          font-weight: bold;
+        }
+
+        &.chapter {
+          counter-increment: chapter;
+          counter-reset: section;
 
           &::before {
+            content: counter(chapter) '. ';
+            color: black;
             font-weight: bold;
+            font-size: 120%;
+            padding-left: 1em;
           }
+          > a { font-size: 120%; }
 
-          &.chapter {
-            counter-increment: chapter;
-            counter-reset: section;
-
+          > ol > li {
+            counter-increment: section;
             &::before {
-              content: counter(chapter) '. ';
+              content: counter(chapter) '.' counter(section) ' ';
               color: black;
               font-weight: bold;
-              font-size: 120%;
-              padding-left: 1em;
-            }
-            > a { font-size: 120%; }
-
-            > ol > li {
-              counter-increment: section;
-              &::before {
-                content: counter(chapter) '.' counter(section) ' ';
-                color: black;
-                font-weight: bold;
-                padding-left: 2em;
-              }
+              padding-left: 2em;
             }
           }
         }

@@ -70,27 +70,23 @@ h6:hover .header-link {
 .book .book-summary {
   background-color: #fafafa;
 }
-.book .book-summary .summary {
+.book .book-summary ul.summary {
   counter-reset: chapter;
 }
-.book .book-summary .summary li.part {
+.book .book-summary ul.summary li.part {
   font-size: 130%;
   font-weight: bold;
   color: black;
   padding-left: 15px;
 }
-.book .book-summary .summary li.part > ol {
+.book .book-summary ul.summary li.part > ol {
   font-size: 70%;
   font-weight: normal;
 }
-.book .book-summary .summary ol {
+.book .book-summary ul.summary ol {
   padding: 0;
 }
-.book .book-summary .summary ol a {
-  display: inline !important;
-  padding: 0;
-}
-.book .book-summary .summary ol li {
+.book .book-summary ul.summary li {
   padding: 10px 0px;
   list-style-type: none;
   /* Add ellipses if the title is long */
@@ -98,27 +94,30 @@ h6:hover .header-link {
   overflow-x: hidden;
   text-overflow: ellipsis;
 }
-.book .book-summary .summary ol li::before {
+.book .book-summary ul.summary li > a {
+  display: inline !important;
+}
+.book .book-summary ul.summary li::before {
   font-weight: bold;
 }
-.book .book-summary .summary ol li.chapter {
+.book .book-summary ul.summary li.chapter {
   counter-increment: chapter;
   counter-reset: section;
 }
-.book .book-summary .summary ol li.chapter::before {
+.book .book-summary ul.summary li.chapter::before {
   content: counter(chapter) '. ';
   color: black;
   font-weight: bold;
   font-size: 120%;
   padding-left: 1em;
 }
-.book .book-summary .summary ol li.chapter > a {
+.book .book-summary ul.summary li.chapter > a {
   font-size: 120%;
 }
-.book .book-summary .summary ol li.chapter > ol > li {
+.book .book-summary ul.summary li.chapter > ol > li {
   counter-increment: section;
 }
-.book .book-summary .summary ol li.chapter > ol > li::before {
+.book .book-summary ul.summary li.chapter > ol > li::before {
   content: counter(chapter) '.' counter(section) ' ';
   color: black;
   font-weight: bold;
