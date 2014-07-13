@@ -58,6 +58,9 @@ h6:hover .header-link {
 .book .book-body .book-progress .bar {
   height: 10px;
 }
+.book .book-body .page-wrapper .page-inner {
+  max-width: calc(100% - 250px);
+}
 .book .book-body .page-wrapper .page-inner figure {
   display: table;
   width: 100%;
