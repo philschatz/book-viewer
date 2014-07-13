@@ -9,7 +9,7 @@ BookConfig.baseHref ?= null # or '//archive.cnx.org/contents' (for loading resou
 BookConfig.serverAddsTrailingSlash ?= false # Used because jekyll adds trailing slashes
 BookConfig.searchIndex ?= null
 BookConfig.contributeUrl ?= null
-BookConfig.rootUrl = BookConfig.rootUrl or '/'
+BookConfig.rootUrl = BookConfig.rootUrl or ''
 
 
 # Inject the <link> tags for FontAwesome
@@ -88,7 +88,7 @@ $ () ->
     evt.preventDefault()
 
   updateContributeUrl = (href) ->
-    href = URI(href).relativeTo(URI(BookConfig.rootUrl)).pathname()
+    href = URI(href).relativeTo(URI(BookConfig.rootUrl + '/')).pathname()
     href = href.replace(/\.html$/, '.md')
     $bookSummary.find('.edit-contribute > a').attr('href', "#{BookConfig.contributeUrl}/#{href}")
 

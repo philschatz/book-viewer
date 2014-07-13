@@ -46,7 +46,7 @@
     BookConfig.contributeUrl = null;
   }
 
-  BookConfig.rootUrl = BookConfig.rootUrl || '/';
+  BookConfig.rootUrl = BookConfig.rootUrl || '';
 
   if (BookConfig.includes.fontawesome) {
     fa = document.createElement('link');
@@ -81,7 +81,7 @@
       return evt.preventDefault();
     });
     updateContributeUrl = function(href) {
-      href = URI(href).relativeTo(URI(BookConfig.rootUrl)).pathname();
+      href = URI(href).relativeTo(URI(BookConfig.rootUrl + '/')).pathname();
       href = href.replace(/\.html$/, '.md');
       return $bookSummary.find('.edit-contribute > a').attr('href', "" + BookConfig.contributeUrl + "/" + href);
     };
