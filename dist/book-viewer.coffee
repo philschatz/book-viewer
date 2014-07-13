@@ -166,6 +166,45 @@ $ () ->
       $figure.prepend("<div data-type='title'>#{$img.attr('data-title')}</div>") if $img.attr('data-title')
       $figure.attr('id', id)
 
+    # From `webview/body.coffee`
+    # Wrap title and content elements in header and section elements, respectively
+    $els.find('.example, .exercise, .note,
+              [data-type="example"], [data-type="exercise"], [data-type="note"]').each (index, el) ->
+      $el = $(el)
+      $contents = $el.contents().filter (i, node) ->
+        return !$(node).is('.title, [data-type="title"]')
+      $contents.wrapAll('<section>')
+      $title = $el.children('.title, [data-type="title"]')
+      $el.prepend($title) # HACK: Sometimes the title is below the note body. odd
+      $title.wrap('<header>')
+      # Add an attribute for the parents' `data-label`
+      # since CSS does not support `parent(attr(data-label))`.
+      # When the title exists, this attribute is added before it
+      $title.attr('data-label-parent', $el.attr('data-label'))
+      # Add a class for styling since CSS does not support `:has(> .title)`
+      $el.toggleClass('ui-has-child-title', $title.length > 0)
+
+    # Wrap solutions in a div so "Show/Hide Solutions" work
+    $els.find('.solution, [data-type="solution"]')
+    .wrapInner('<section class="ui-body">')
+    .prepend('''
+      <div class="ui-toggle-wrapper">
+        <button class="btn-link ui-toggle" title="Show/Hide Solution"></button>
+      </div>''')
+
+    $els.on 'click', '.ui-toggle', (e) ->
+      $solution = $(e.currentTarget).closest('.solution, [data-type="solution"]')
+      $solution.toggleClass('ui-solution-visible')
+
+    $els.find('figure:has(> figcaption)').addClass('ui-has-child-figcaption')
+
+    # Move all figure captions below the figure
+    $els.find('figcaption').each (i, el) ->
+      $(el).parent().append(el)
+
+
+
+
     # Remember that this page has been visited
     currentPagePath = URI(href).pathname()
     visited = window.localStorage.visited and JSON.parse(window.localStorage.visited) or {}
@@ -253,6 +292,7 @@ $ () ->
     $book.find('base').remove()
     $book.prepend("<base href='#{BookConfig.baseHref}'/>")
 
+  $originalPage = $('<div class="contents"></div>').append($originalPage)
   pageBeforeRender($originalPage, URI(window.location.href).pathname())
   $bookPage.append($originalPage)
 
@@ -270,8 +310,9 @@ $ () ->
         $book.find('base').remove()
         $book.prepend("<base href='#{BookConfig.urlFixer(href)}'/>")
 
-      pageBeforeRender($html.children(), href)
-      $bookPage.append($html.children()) # TODO: Strip out title and meta tags
+      $page = $('<div class="contents"></div>').append($html.children())
+      pageBeforeRender($page, href)
+      $bookPage.append($page) # TODO: Strip out title and meta tags
       $book.removeClass('loading')
       # Scroll to top of page after loading
       $('.body-inner').scrollTop(0)

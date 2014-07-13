@@ -159,6 +159,29 @@
         }
         $figure.attr('id', id);
       }
+      $els.find('.example, .exercise, .note, [data-type="example"], [data-type="exercise"], [data-type="note"]').each(function(index, el) {
+        var $contents, $el, $title;
+        $el = $(el);
+        $contents = $el.contents().filter(function(i, node) {
+          return !$(node).is('.title, [data-type="title"]');
+        });
+        $contents.wrapAll('<section>');
+        $title = $el.children('.title, [data-type="title"]');
+        $el.prepend($title);
+        $title.wrap('<header>');
+        $title.attr('data-label-parent', $el.attr('data-label'));
+        return $el.toggleClass('ui-has-child-title', $title.length > 0);
+      });
+      $els.find('.solution, [data-type="solution"]').wrapInner('<section class="ui-body">').prepend('<div class="ui-toggle-wrapper">\n  <button class="btn-link ui-toggle" title="Show/Hide Solution"></button>\n</div>');
+      $els.on('click', '.ui-toggle', function(e) {
+        var $solution;
+        $solution = $(e.currentTarget).closest('.solution, [data-type="solution"]');
+        return $solution.toggleClass('ui-solution-visible');
+      });
+      $els.find('figure:has(> figcaption)').addClass('ui-has-child-figcaption');
+      $els.find('figcaption').each(function(i, el) {
+        return $(el).parent().append(el);
+      });
       currentPagePath = URI(href).pathname();
       visited = window.localStorage.visited && JSON.parse(window.localStorage.visited) || {};
       visited[currentPagePath] = new Date();
@@ -269,6 +292,7 @@
       $book.find('base').remove();
       $book.prepend("<base href='" + BookConfig.baseHref + "'/>");
     }
+    $originalPage = $('<div class="contents"></div>').append($originalPage);
     pageBeforeRender($originalPage, URI(window.location.href).pathname());
     $bookPage.append($originalPage);
     changePage = function(href) {
@@ -280,7 +304,7 @@
         },
         dataType: 'html'
       }).then(function(html) {
-        var $html;
+        var $html, $page;
         $html = $("<div>" + html + "</div>");
         $html.children('meta, link, script, title').remove();
         $bookPage.contents().remove();
@@ -288,8 +312,9 @@
           $book.find('base').remove();
           $book.prepend("<base href='" + (BookConfig.urlFixer(href)) + "'/>");
         }
-        pageBeforeRender($html.children(), href);
-        $bookPage.append($html.children());
+        $page = $('<div class="contents"></div>').append($html.children());
+        pageBeforeRender($page, href);
+        $bookPage.append($page);
         $book.removeClass('loading');
         return $('.body-inner').scrollTop(0);
       });
