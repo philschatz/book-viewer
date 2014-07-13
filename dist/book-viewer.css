@@ -784,6 +784,13 @@ h6:hover .header-link {
 .book .book-summary {
   background-color: #fafafa;
 }
+.book .book-summary.search-results-show li:not(.search-result) {
+  height: 0;
+  padding: 0;
+}
+.book .book-summary.search-results-show li:not(.search-result) > i.fa.fa-check {
+  display: none !important;
+}
 .book .book-summary ul.summary {
   counter-reset: chapter;
 }

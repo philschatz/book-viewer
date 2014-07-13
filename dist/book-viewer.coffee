@@ -7,7 +7,9 @@ BookConfig.toc.url       ?= '../toc'   # or '../SUMMARY' for GitBook
 BookConfig.toc.selector  ?= 'nav, ol, ul'  # picks the first one that matches
 BookConfig.baseHref ?= null # or '//archive.cnx.org/contents' (for loading resources)
 BookConfig.serverAddsTrailingSlash ?= false # Used because jekyll adds trailing slashes
-
+BookConfig.searchIndex ?= null
+BookConfig.contributeUrl ?= null
+BookConfig.rootUrl = BookConfig.rootUrl or '/'
 
 
 # Inject the <link> tags for FontAwesome
@@ -62,6 +64,7 @@ $ () ->
   # Squirrel the body and replace it with the template:
   $body = $('body')
   $originalPage = $body.contents()
+  searchIndex = null
 
   $body.contents().remove()
   $body.append(BOOK_TEMPLATE)
@@ -84,18 +87,17 @@ $ () ->
     $book.toggleClass('with-summary')
     evt.preventDefault()
 
-  $toggleSearch.on 'click', (evt) ->
-    unless $book.hasClass('with-search')
-      $book.addClass('with-summary')
-      $bookSearchInput.focus()
-    $book.toggleClass('with-search')
-    evt.preventDefault()
+  updateContributeUrl = (href) ->
+    href = URI(href).relativeTo(URI(BookConfig.rootUrl)).pathname()
+    href = href.replace(/\.html$/, '.md')
+    $bookSummary.find('.edit-contribute > a').attr('href', "#{BookConfig.contributeUrl}/#{href}")
 
   renderToc = ->
     $summary = $('<ul class="summary"></ul>')
     if BookConfig.issuesUrl
       $summary.append("<li class='issues'><a target='_blank' href='#{BookConfig.issuesUrl}'>Questions and Issues</a></li>")
-    $summary.append("<li class='edit-contribute'><a target='_blank' href='#{BookConfig.url}'>Edit and Contribute</a></li>")
+    if BookConfig.contributeUrl
+      $summary.append("<li class='edit-contribute'><a target='_blank' href='#{BookConfig.contributeUrl}'>Edit and Contribute</a></li>")
     $summary.append('<li class="divider"/>')
     $summary.append(tocHelper.$toc.children('li'))
 
@@ -112,6 +114,7 @@ $ () ->
     currentPagePath = URI(window.location.href).pathname()
     $bookSummary.find(".summary li:has(> a[href='#{currentPagePath}'])").parent().parent()[0]?.scrollIntoView()
     renderNextPrev()
+    updateContributeUrl(currentPagePath)
 
   renderNextPrev = ->
     # Update the progress bar
@@ -153,6 +156,8 @@ $ () ->
       a.setAttribute('href', href)
 
   pageBeforeRender = ($els, href) ->
+    updateContributeUrl(href)
+
     for el in $els.find('a[href]')
       mdToHtmlFix(el)
 
@@ -341,3 +346,39 @@ $ () ->
       renderNextPrev()
 
     evt.preventDefault()
+
+
+  # Fetch the search index
+  if BookConfig.searchIndex
+    $.getJSON(BookConfig.searchIndex)
+    .then (index) ->
+      searchIndex = lunr.Index.load(index)
+      $bookSearchInput.removeClass('disabled')
+
+      $toggleSearch.on 'click', (evt) ->
+        if $book.hasClass('with-search')
+          $bookSummary.removeClass('search-results-show')
+          $bookSummary.find('.search-result').removeClass('search-result')
+          $bookSearchInput.val('')
+        else
+          $book.addClass('with-summary')
+          $bookSearchInput.focus()
+        $book.toggleClass('with-search')
+        evt.preventDefault()
+
+      $bookSearchInput.on 'keyup', ->
+        query = $bookSearchInput.val()
+        unless query
+          $bookSummary.removeClass('search-results-show')
+          $bookSummary.find('.search-result').removeClass('search-result')
+          return
+
+        results = searchIndex.search(query)
+        # Show results in the ToC
+        $bookSummary.addClass('search-results-show')
+        $bookSummary.find('.search-result').removeClass('search-result')
+
+        for result in results
+          $li = $bookSummary.find("a[href$='#{result.ref}']").parent()
+          $li.addClass('search-result')
+          $li.parentsUntil($bookSummary).addClass('search-result')

@@ -88,6 +88,15 @@ h6:hover .header-link {
   .book-summary {
     background-color: #fafafa;
 
+    &.search-results-show {
+      li:not(.search-result) {
+        height: 0;
+        padding: 0;
+
+        > i.fa.fa-check { display: none !important; }
+      }
+    }
+
     ul.summary {
       counter-reset: chapter;
 
@@ -143,5 +152,3 @@ h6:hover .header-link {
 }
 
 .page { counter-reset: figure; }
-
-
