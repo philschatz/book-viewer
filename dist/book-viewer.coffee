@@ -234,6 +234,8 @@ $ () ->
         $el.prepend($a)
 
 
+    MathJax?.Hub.Queue ["Typeset", MathJax.Hub, $els[0]]
+
 
   tocHelper = new class TocHelper
     _tocHref: null

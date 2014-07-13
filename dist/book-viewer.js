@@ -203,7 +203,7 @@
       }
       selector = 'h1, h2, h3, h4, h5, h6';
       $all = $els.filter(selector).add($els.find(selector));
-      return $all.each(function(i, el) {
+      $all.each(function(i, el) {
         var $a, $el, icon;
         $el = $(el);
         id = $el.attr('id');
@@ -213,6 +213,7 @@
           return $el.prepend($a);
         }
       });
+      return typeof MathJax !== "undefined" && MathJax !== null ? MathJax.Hub.Queue(["Typeset", MathJax.Hub, $els[0]]) : void 0;
     };
     tocHelper = new (TocHelper = (function() {
       function TocHelper() {}
