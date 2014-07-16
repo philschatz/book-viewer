@@ -318,13 +318,18 @@
         dataType: 'html'
       }).then(function(html) {
         var $html, $page;
-        $html = $("<div>" + html + "</div>");
-        $html.children('meta, link, script, title').remove();
-        $bookPage.contents().remove();
+        if (!/https?:\/\//.test(href)) {
+          href = "" + window.location.origin + href;
+        }
+        window.history.pushState(null, null, href);
+        renderNextPrev();
         if (BookConfig.baseHref) {
           $book.find('base').remove();
           $book.prepend("<base href='" + (BookConfig.urlFixer(href)) + "'/>");
         }
+        $html = $("<div>" + html + "</div>");
+        $html.children('meta, link, script, title').remove();
+        $bookPage.contents().remove();
         $page = $('<div class="contents"></div>').append($html.children());
         pageBeforeRender($page, href);
         $bookPage.append($page);
@@ -352,13 +357,7 @@
       var href;
       href = addTrailingSlash($(this).attr('href'));
       href = URI(href).absoluteTo(URI(window.location.href)).toString();
-      changePage(href).then(function() {
-        if (!/https?:\/\//.test(href)) {
-          href = "" + window.location.origin + href;
-        }
-        window.history.pushState(null, null, href);
-        return renderNextPrev();
-      });
+      changePage(href);
       return evt.preventDefault();
     });
     if (BookConfig.searchIndex) {

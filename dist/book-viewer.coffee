@@ -307,15 +307,24 @@ $ () ->
     $book.addClass('loading')
     $.ajax(url: BookConfig.urlFixer(href), headers: {'Accept': 'application/xhtml+xml'}, dataType: 'html')
     .then (html) ->
-      $html = $("<div>#{html}</div>")
-      $html.children('meta, link, script, title').remove()
 
-      $bookPage.contents().remove()
+      # Use `window.location.origin` to get around a <base href=""> pointing to another hostname
+      unless /https?:\/\//.test(href)
+        href = "#{window.location.origin}#{href}"
+      window.history.pushState(null, null, href)
+      renderNextPrev()
 
+      # Need to set the URL *before* <img> tags area created
       # Fetch resources without fixing up their paths
       if BookConfig.baseHref
         $book.find('base').remove()
         $book.prepend("<base href='#{BookConfig.urlFixer(href)}'/>")
+
+
+      $html = $("<div>#{html}</div>")
+      $html.children('meta, link, script, title').remove()
+
+      $bookPage.contents().remove()
 
       $page = $('<div class="contents"></div>').append($html.children())
       pageBeforeRender($page, href)
@@ -340,12 +349,6 @@ $ () ->
     href = URI(href).absoluteTo(URI(window.location.href)).toString()
 
     changePage(href)
-    .then ->
-      # Use `window.location.origin` to get around a <base href=""> pointing to another hostname
-      unless /https?:\/\//.test(href)
-        href = "#{window.location.origin}#{href}"
-      window.history.pushState(null, null, href)
-      renderNextPrev()
 
     evt.preventDefault()
 
