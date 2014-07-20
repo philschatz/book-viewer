@@ -23,6 +23,9 @@ section.normal > .title {
 .book .book-body .page-wrapper .page-inner section.normal img[alt^='QR'] {
   max-width: 2in;
 }
+.book .book-body .page-wrapper .page-inner section.normal *[data-type='abstract'] {
+  display: none;
+}
 /* When the URL refers to in-page elements make them stand out a bit */
 :target {
   background-color: #ffd;
