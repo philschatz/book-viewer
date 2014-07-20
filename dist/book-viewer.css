@@ -850,3 +850,25 @@ h6:hover .header-link {
 .page {
   counter-reset: figure;
 }
+div.hopscotch-bubble {
+  border: 1px solid rgba(0, 0, 0, 0.5) !important;
+  border-radius: 10px !important;
+}
+div.hopscotch-bubble a.hopscotch-bubble-close {
+  padding-right: 15px !important;
+}
+div.hopscotch-bubble span.hopscotch-bubble-number {
+  padding: 0 !important;
+}
+div.hopscotch-bubble-arrow-container.left {
+  left: -18px !important;
+}
+div.hopscotch-bubble-arrow-container.left .hopscotch-bubble-arrow {
+  left: 1px !important;
+}
+div.hopscotch-bubble-arrow-container.right {
+  right: -35px !important;
+}
+div.hopscotch-bubble-arrow-container.right .hopscotch-bubble-arrow {
+  left: -1px !important;
+}

@@ -20,7 +20,6 @@ if BookConfig.includes.fontawesome
   document.head.appendChild(fa)
 
 
-
 BOOK_TEMPLATE = '''
   <div class="book with-summary font-size-2 font-family-1">
 
@@ -60,7 +59,7 @@ BOOK_TEMPLATE = '''
   </div>
 '''
 
-$ () ->
+$ ->
   # Squirrel the body and replace it with the template:
   $body = $('body')
   $originalPage = $body.contents()
@@ -294,6 +293,8 @@ $ () ->
     tocHelper.loadToc(BookConfig.toc.url, $toc, $title)
     $bookTitle.html(tocHelper.$title)
 
+    doHopscotch()
+
   # Fetch resources without fixing up their paths
   if BookConfig.baseHref
     $book.find('base').remove()
@@ -387,3 +388,80 @@ $ () ->
           $li = $bookSummary.find("a[href$='#{result.ref}']").parent()
           $li.addClass('search-result')
           $li.parentsUntil($bookSummary).addClass('search-result')
+
+
+# Hopscotch code
+
+# Steps:
+# - Toggle the Table of Contents to increase reading space
+# - See which parts of the book you have already read
+# - Search the book
+# - Submit any issues you find with the book
+# - Edit the current page directly on GitHub to fix typos or add contributions
+# - Click this or use the keyboard arrow keys to move through the book
+# - Share this book on Facebook, Twitter, or Google
+#
+genTour = ->
+  steps: [
+    {
+      title: 'Welcome to the Book Reader'
+      content: 'This tour will quickly go through the features of the book reader.'
+      target: document.querySelector('.book-title')
+      placement: 'left'
+    }
+    {
+      title: 'Table of Contents'
+      content: 'Click to hide/show the Table of Contents.'
+      target: document.querySelector('.toggle-summary')
+      placement: 'right'
+    }
+    {
+      title: 'Search'
+      content: 'Search the book.'
+      target: document.querySelector('.toggle-search')
+      placement: 'right'
+    }
+    {
+      title: 'Submit Suggestions'
+      content: 'Submit any issues/suggestions you find.'
+      target: document.querySelector('.summary > .issues')
+      placement: 'right'
+    }
+    {
+      title: 'Edit This Page'
+      content: 'Edit the current page directly on GitHub to fix typos or add contributions.'
+      target: document.querySelector('.summary .edit-contribute')
+      placement: 'right'
+    }
+    {
+      title: 'Table of Contents'
+      content: 'See which parts of the book you have already read. Checkmarks show which pages you have already read.'
+      target: document.querySelector('.summary .divider')
+      placement: 'right'
+    }
+    {
+      title: 'Navigation'
+      content: 'Click this or use the keyboard arrow keys to move through the book.'
+      target: document.querySelector('.book-body > .navigation > i')
+      placement: 'left'
+    }
+    {
+      title: 'Share'
+      content: 'Share this book on Facebook, Twitter, or Google!'
+      target: document.querySelector('.twitter-sharing-link')
+      placement: 'left'
+    }
+  ]
+
+doHopscotch = ->
+
+  # Inject the hopscotch style and JS
+  el = document.createElement('link')
+  el.rel = 'stylesheet'
+  el.href = '//linkedin.github.io/hopscotch/css/hopscotch.css'
+  document.head.appendChild(el)
+
+  $ ->
+    $.getScript '//linkedin.github.io/hopscotch/js/hopscotch-0.1.2.min.js', ->
+      window.hopscotch.startTour(genTour())
+      document.querySelector('.summary *').scrollIntoView()
