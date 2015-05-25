@@ -26,6 +26,7 @@ BOOK_TEMPLATE = '''
     <div class="book-header">
       <a href="#" class="btn pull-left toggle-summary" aria-label="Toggle summary"><i class="fa fa-align-justify"></i></a>
       <a href="#" class="btn pull-left toggle-search" aria-label="Search book"><i class="fa fa-search"></i></a>
+      <a href="#" class="btn pull-left start-hopscotch" aria-label="Help"><i class="fa fa-question"></i></a>
       <h1><i class="fa fa-spinner fa-spin book-spinner"></i><span class="book-title"></span></h1>
 
       <a href="#" target="_blank" class="btn pull-right google-plus-sharing-link sharing-link" data-sharing="google-plus" aria-label="Share on Google Plus"><i class="fa fa-google-plus"></i></a>
@@ -78,7 +79,7 @@ $ ->
   $bookPage = $book.find('.page-inner > .normal')
   $bookTitle = $book.find('.book-title')
   $bookProgressBar = $book.find('.book-progress .bar .inner')
-
+  $startHopscotch = $book.find('.start-hopscotch')
 
   $toggleSummary.on 'click', (evt) ->
     if $book.hasClass('with-summary')
@@ -235,6 +236,9 @@ $ ->
 
     MathJax?.Hub.Queue ["Typeset", MathJax.Hub, $els[0]]
 
+  $startHopscotch.on 'click', (evt) ->
+    evt.preventDefault()
+    doHopscotch()
 
   tocHelper = new class TocHelper
     _tocHref: null
@@ -292,8 +296,6 @@ $ ->
       $title = $root.children('title').contents()
     tocHelper.loadToc(BookConfig.toc.url, $toc, $title)
     $bookTitle.html(tocHelper.$title)
-
-    doHopscotch()
 
   # Fetch resources without fixing up their paths
   if BookConfig.baseHref

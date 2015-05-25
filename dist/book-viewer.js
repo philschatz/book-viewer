@@ -55,10 +55,10 @@
     document.head.appendChild(fa);
   }
 
-  BOOK_TEMPLATE = '<div class="book with-summary font-size-2 font-family-1">\n\n  <div class="book-header">\n    <a href="#" class="btn pull-left toggle-summary" aria-label="Toggle summary"><i class="fa fa-align-justify"></i></a>\n    <a href="#" class="btn pull-left toggle-search" aria-label="Search book"><i class="fa fa-search"></i></a>\n    <h1><i class="fa fa-spinner fa-spin book-spinner"></i><span class="book-title"></span></h1>\n\n    <a href="#" target="_blank" class="btn pull-right google-plus-sharing-link sharing-link" data-sharing="google-plus" aria-label="Share on Google Plus"><i class="fa fa-google-plus"></i></a>\n    <a href="#" target="_blank" class="btn pull-right facebook-sharing-link sharing-link" data-sharing="facebook" aria-label="Share on Facebook"><i class="fa fa-facebook"></i></a>\n    <a href="#" target="_blank" class="btn pull-right twitter-sharing-link sharing-link" data-sharing="twitter" aria-label="Share on Twitter"><i class="fa fa-twitter"></i></a>\n  </div>\n\n  <div class="book-summary">\n    <div class="book-search">\n      <input type="text" placeholder="Search" class="form-control">\n    </div>\n  </div>\n\n  <div class="book-body">\n    <div class="body-inner">\n      <div class="page-wrapper" tabindex="-1">\n        <div class="book-progress">\n          <div class="bar">\n            <div class="inner" style="min-width: 0%;"></div>\n          </div>\n        </div>\n        <div class="page-inner">\n          <section class="normal">\n            <!-- content -->\n          </section>\n        </div>\n      </div>\n    </div>\n  </div>\n\n</div>';
+  BOOK_TEMPLATE = '<div class="book with-summary font-size-2 font-family-1">\n\n  <div class="book-header">\n    <a href="#" class="btn pull-left toggle-summary" aria-label="Toggle summary"><i class="fa fa-align-justify"></i></a>\n    <a href="#" class="btn pull-left toggle-search" aria-label="Search book"><i class="fa fa-search"></i></a>\n    <a href="#" class="btn pull-left start-hopscotch" aria-label="Help"><i class="fa fa-question"></i></a>\n    <h1><i class="fa fa-spinner fa-spin book-spinner"></i><span class="book-title"></span></h1>\n\n    <a href="#" target="_blank" class="btn pull-right google-plus-sharing-link sharing-link" data-sharing="google-plus" aria-label="Share on Google Plus"><i class="fa fa-google-plus"></i></a>\n    <a href="#" target="_blank" class="btn pull-right facebook-sharing-link sharing-link" data-sharing="facebook" aria-label="Share on Facebook"><i class="fa fa-facebook"></i></a>\n    <a href="#" target="_blank" class="btn pull-right twitter-sharing-link sharing-link" data-sharing="twitter" aria-label="Share on Twitter"><i class="fa fa-twitter"></i></a>\n  </div>\n\n  <div class="book-summary">\n    <div class="book-search">\n      <input type="text" placeholder="Search" class="form-control">\n    </div>\n  </div>\n\n  <div class="book-body">\n    <div class="body-inner">\n      <div class="page-wrapper" tabindex="-1">\n        <div class="book-progress">\n          <div class="bar">\n            <div class="inner" style="min-width: 0%;"></div>\n          </div>\n        </div>\n        <div class="page-inner">\n          <section class="normal">\n            <!-- content -->\n          </section>\n        </div>\n      </div>\n    </div>\n  </div>\n\n</div>';
 
   $(function() {
-    var $body, $book, $bookBody, $bookPage, $bookProgressBar, $bookSearchInput, $bookSummary, $bookTitle, $originalPage, $toggleSearch, $toggleSummary, TocHelper, addTrailingSlash, changePage, mdToHtmlFix, pageBeforeRender, removeTrailingSlash, renderNextPrev, renderToc, searchIndex, tocHelper, updateContributeUrl;
+    var $body, $book, $bookBody, $bookPage, $bookProgressBar, $bookSearchInput, $bookSummary, $bookTitle, $originalPage, $startHopscotch, $toggleSearch, $toggleSummary, TocHelper, addTrailingSlash, changePage, mdToHtmlFix, pageBeforeRender, removeTrailingSlash, renderNextPrev, renderToc, searchIndex, tocHelper, updateContributeUrl;
     $body = $('body');
     $originalPage = $body.contents();
     searchIndex = null;
@@ -73,6 +73,7 @@
     $bookPage = $book.find('.page-inner > .normal');
     $bookTitle = $book.find('.book-title');
     $bookProgressBar = $book.find('.book-progress .bar .inner');
+    $startHopscotch = $book.find('.start-hopscotch');
     $toggleSummary.on('click', function(evt) {
       if ($book.hasClass('with-summary')) {
         $book.removeClass('with-search');
@@ -215,6 +216,10 @@
       });
       return typeof MathJax !== "undefined" && MathJax !== null ? MathJax.Hub.Queue(["Typeset", MathJax.Hub, $els[0]]) : void 0;
     };
+    $startHopscotch.on('click', function(evt) {
+      evt.preventDefault();
+      return doHopscotch();
+    });
     tocHelper = new (TocHelper = (function() {
       function TocHelper() {}
 
@@ -299,8 +304,7 @@
         $title = $root.children('title').contents();
       }
       tocHelper.loadToc(BookConfig.toc.url, $toc, $title);
-      $bookTitle.html(tocHelper.$title);
-      return doHopscotch();
+      return $bookTitle.html(tocHelper.$title);
     });
     if (BookConfig.baseHref) {
       $book.find('base').remove();
