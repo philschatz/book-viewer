@@ -21,7 +21,7 @@ section.normal > .title {
   counter-reset: figure, note, exercise, example, table;
 }
 .book .book-body .page-wrapper .page-inner section.normal img[alt^='QR'] {
-  max-width: 2in;
+  display: none;
 }
 .book .book-body .page-wrapper .page-inner section.normal *[data-type='abstract'] {
   display: none;
@@ -874,4 +874,7 @@ div.hopscotch-bubble-arrow-container.right {
 }
 div.hopscotch-bubble-arrow-container.right .hopscotch-bubble-arrow {
   left: -1px !important;
+}
+cnx-pi {
+  display: none;
 }
