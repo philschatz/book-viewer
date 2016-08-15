@@ -454,17 +454,17 @@
   };
 
   doHopscotch = function() {
-    var el;
-    el = document.createElement('link');
-    el.rel = 'stylesheet';
-    el.href = '//linkedin.github.io/hopscotch/css/hopscotch.css';
-    document.head.appendChild(el);
-    return $(function() {
-      return $.getScript('//linkedin.github.io/hopscotch/js/hopscotch-0.1.2.min.js', function() {
-        window.hopscotch.startTour(genTour());
-        return document.querySelector('.summary *').scrollIntoView();
-      });
-    });
+    // var el;
+    // el = document.createElement('link');
+    // el.rel = 'stylesheet';
+    // el.href = '//linkedin.github.io/hopscotch/css/hopscotch.css';
+    // document.head.appendChild(el);
+    // return $(function() {
+    //   return $.getScript('//linkedin.github.io/hopscotch/js/hopscotch-0.1.2.min.js', function() {
+    //     window.hopscotch.startTour(genTour());
+    //     return document.querySelector('.summary *').scrollIntoView();
+    //   });
+    // });
   };
 
 }).call(this);
